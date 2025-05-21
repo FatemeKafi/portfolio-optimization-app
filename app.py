@@ -297,7 +297,6 @@ def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f
     # نمایش نمودار در Streamlit
     st.pyplot(fig)
 
-plot_pie_chart_with_details(portfolio_data['category_allocation'], f'Portfolio Allocation (Risk Level {risk_level})')
 
 # --- Main Execution Logic ---
 if __name__ == "__main__":
