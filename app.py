@@ -7,7 +7,6 @@ from datetime import datetime
 
 # --- 1. Define Portfolio Data ---
 
-portfolio_data = get_portfolio_data(risk_level)
 portfolio_data = {
     2: {'category_allocation': {'Bond': 1.0, 'Equity': 0.0}, 'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.5}},
     3: {'category_allocation': {'Bond': 0.8, 'Equity': 0.2}, 'specific_etf_allocation': {'SUSB': 0.4, 'EAGG': 0.4, 'ESGV': 0.2}},
