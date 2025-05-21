@@ -6,6 +6,8 @@ import yfinance as yf
 from datetime import datetime
 
 # --- 1. Define Portfolio Data ---
+
+portfolio_data = get_portfolio_data(risk_level)
 portfolio_data = {
     2: {'category_allocation': {'Bond': 1.0, 'Equity': 0.0}, 'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.5}},
     3: {'category_allocation': {'Bond': 0.8, 'Equity': 0.2}, 'specific_etf_allocation': {'SUSB': 0.4, 'EAGG': 0.4, 'ESGV': 0.2}},
@@ -265,7 +267,7 @@ def get_portfolio_data(risk_level):
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f%%', startangle=140):
+ddef plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f%%', startangle=140):
     labels = []
     sizes = []
     for label, size in data_dict.items():
@@ -292,7 +294,11 @@ def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f
     ax.legend(wedges, labels, title="Assets", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     ax.set_title(title)
     ax.axis('equal')
-    plt.show()
+
+    # نمایش نمودار در Streamlit
+    st.pyplot(fig)
+
+plot_pie_chart_with_details(portfolio_data['category_allocation'], f'Portfolio Allocation (Risk Level {risk_level})')
 
 # --- Main Execution Logic ---
 if __name__ == "__main__":
