@@ -122,11 +122,11 @@ def show_questionnaire():
         total_score += qdata["scores"][selected_index]
 
     # ذخیره نتیجه امتیاز در session state
-    if st.button("Submit"):
+     if st.button("Submit"):
         st.session_state.total_score = total_score
         st.session_state.risk_level = calculate_risk_level(total_score)
         st.success(f"Your total score: {total_score}")
-        st.experimental_rerun()
+        st.session_state.page = "portfolio" 
 
 # --- 4. Calculate Risk Level Function ---
 def calculate_risk_level(total_score):
