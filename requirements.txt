@@ -2,3 +2,10 @@ streamlit>=1.0.0
 matplotlib
 yfinance
 datetime
+streamlit
+yfinance
+pandas
+numpy
+scipy
+matplotlib
+openpyxl 
