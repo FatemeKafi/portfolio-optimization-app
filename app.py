@@ -310,7 +310,7 @@ if st.session_state.page == 'info':
                 }
                 st.success(f"Welcome, {user_name}! Let's start the questionnaire.")
                 st.session_state.page = 'questionnaire'
-                st.experimental_rerun() # Rerun to go to the next page
+                st.rerun() # Rerun to go to the next page
             else:
                 st.error("Please fill in all personal information fields.")
 
