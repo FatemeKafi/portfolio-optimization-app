@@ -267,7 +267,7 @@ def get_portfolio_data(risk_level):
 import matplotlib.pyplot as plt
 import numpy as np
 
-ddef plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f%%', startangle=140):
+def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f%%', startangle=140):
     labels = []
     sizes = []
     for label, size in data_dict.items():
