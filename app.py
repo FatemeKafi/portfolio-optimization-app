@@ -397,7 +397,7 @@ elif st.session_state.page == 'questionnaire':
             st.write(" ".join(final_summary_parts))
 
         st.session_state.page = 'results'
-        st.experimental_rerun()
+        st.rerun()
 
 # --- Page 3: Results and Portfolio Analysis ---
 elif st.session_state.page == 'results':
