@@ -118,13 +118,17 @@ def download_historical_prices(tickers, start_date, end_date):
     """Downloads historical 'Adj Close' price data from Yahoo Finance for a given period."""
     if not tickers:
         st.error("No tickers provided for download.")
-        return pd.DataFrame()
+        #
+        return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+
     st.info(f"Downloading historical data for {tickers} from {start_date} to {end_date}...")
     try:
         data = yf.download(tickers, start=start_date, end=end_date, progress=False)
         if data.empty:
             st.error("No data downloaded. Check ticker symbols or date range.")
-            return pd.DataFrame()
+    
+            return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+
         if 'Adj Close' in data.columns:
             price_data = data['Adj Close']
         elif 'Close' in data.columns:
@@ -136,18 +140,41 @@ def download_historical_prices(tickers, start_date, end_date):
             elif isinstance(data, pd.Series):
                 price_data = data
             else:
-                st.error(f"Could not find 'Adj Close' or 'Close' prices for {tickers}.")
-                return pd.DataFrame()
+                return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+
         if isinstance(price_data, pd.Series): # Ensure it's a DataFrame for consistency
             price_data = price_data.to_frame()
+
         price_data = price_data.dropna(axis=1, how='all') # Drop columns that are all NaN
         price_data = price_data.dropna(axis=0, how='all') # Drop rows that are all NaN
+        
         if price_data.empty:
             st.error("After cleaning, no valid price data remains.")
-        return price_data
+        
+            return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+
+        # --- محاسبه risk_free_rate_annual ---
+        risk_free_rate_annual = 0.0
+        if '^IRX' in price_data.columns: # Check if '^IRX' is in the final price_data
+            rf_series = price_data['^IRX'].dropna()
+            if not rf_series.empty:
+                daily_risk_free_rate = rf_series.mean() / 100.0 / 252 # Convert to daily rate if ^IRX is annual in data
+                risk_free_rate_annual = (1 + daily_risk_free_rate)**252 - 1
+                st.info(f"Calculated Annual Risk-Free Rate: {risk_free_rate_annual*100:.2f}%")
+            else:
+                st.warning("No valid risk-free rate data (^IRX) for the specified period. Using 0 as risk-free rate for Sharpe calculation.")
+        else:
+            st.warning("'^IRX' ticker not found in downloaded data. Using 0 as risk-free rate for Sharpe calculation.")
+        
+        prices_for_portfolios = price_data.drop(columns=['^IRX'], errors='ignore')
+        returns_data = prices_for_portfolios.pct_change().dropna(axis=0, how='all').dropna(axis=1, how='all')
+        
+        return prices_for_portfolios, returns_data, risk_free_rate_annual
     except Exception as e:
-        st.error(f"Error downloading data: {e}")
-        return pd.DataFrame()
+        st.error(f"Error downloading or processing data: {e}")
+
+        return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+
 
 def portfolio_variance(weights, covariance):
     return weights.T @ covariance @ weights
