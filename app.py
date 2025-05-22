@@ -24,6 +24,50 @@ questions = {
     12: {"question": "Do you have any preference for the investment strategy of your Roboadvisor?", "options": ["Yes, I want an active strategy", "No, I want a passive strategy"], "scores": [4, 1]}
 }
 
+# --- Risk Level Recommendations ---
+risk_level_recommendations = {
+    "Ultra Conservative": {
+        "title": "Your Ultra-Conservative Portfolio",
+        "text": "This portfolio prioritizes capital preservation above all else. It's designed for investors who are highly risk-averse and seek minimal exposure to market volatility. Expect modest returns, but with strong protection against significant downturns. Consider this if capital security is your top priority."
+    },
+    "Conservative": {
+        "title": "Your Conservative Portfolio",
+        "text": "This portfolio focuses on capital protection while aiming for stable, consistent returns. It's suitable if you have a low tolerance for market fluctuations and prefer slow, steady growth over aggressive gains. Ideal for those who value stability and predictable income."
+    },
+    "Cautiously Moderate": {
+        "title": "Your Cautiously Moderate Portfolio",
+        "text": "This portfolio seeks a balance between capital preservation and moderate growth. You're willing to take on a small amount of risk to potentially outperform traditional fixed-income investments, but significant market swings are still a concern. It's a prudent choice for measured growth."
+    },
+    "Moderate": {
+        "title": "Your Moderate Portfolio",
+        "text": "This portfolio is built for balanced growth with an acceptable level of risk. You are comfortable with some market fluctuations, understanding they are part of achieving long-term capital appreciation. This strategy aims to provide a healthy mix of stability and growth potential."
+    },
+    "Moderate Growth": {
+        "title": "Your Moderate Growth Portfolio",
+        "text": "This portfolio is designed for investors seeking substantial long-term capital growth and are prepared to accept a moderate to higher level of risk. Short-term market volatility is acceptable, as your focus remains on maximizing growth opportunities over time."
+    },
+    "Growth": {
+        "title": "Your Growth Portfolio",
+        "text": "This portfolio is focused on maximizing capital appreciation over the long term. You possess a higher risk tolerance and are comfortable with notable market fluctuations as a means to pursue strong returns. This strategy is for those prioritizing aggressive wealth accumulation."
+    },
+    "Opportunistic": {
+        "title": "Your Opportunistic Portfolio",
+        "text": "This portfolio actively seeks out investment opportunities with high return potential. You have a significant appetite for risk and are prepared for substantial market volatility and potential drawdowns. This strategy suits investors with a long-term horizon and a strong belief in market recovery."
+    },
+    "Aggressive Growth": {
+        "title": "Your Aggressive Growth Portfolio",
+        "text": "This represents the highest level of risk tolerance. Your primary goal is maximum capital growth, and you are comfortable with the highest possible level of market volatility and potential for large swings. This strategy is best for investors with an extremely high risk tolerance and a very long investment horizon."
+    }
+}
+
+# Define all unique tickers across both fixed portfolio sets, plus risk-free rate
+all_unique_tickers_for_download = sorted(list(set(
+    [etf for data in portfolio_data_fixed.values() for etf in data['specific_etf_allocation'].keys()] +
+    [etf for data in portfolio_data_esg_active.values() for etf in data['specific_etf_allocation'].keys()] + # این خط از روی فایل شما برداشت شده، اگر سبد بهینه سازی شده ندارید باید حذف شود.
+    ['^IRX'] # Add ^IRX for risk-free rate
+)))
+
+
 # --- Portfolio Data (for fixed allocation scenario) ---
 # This data will be used if Q11 and Q12 are both "yes"
 portfolio_data_fixed = {
