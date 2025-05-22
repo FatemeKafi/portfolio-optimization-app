@@ -60,13 +60,6 @@ risk_level_recommendations = {
     }
 }
 
-# Define all unique tickers across both fixed portfolio sets, plus risk-free rate
-all_unique_tickers_for_download = sorted(list(set(
-    [etf for data in portfolio_data_fixed.values() for etf in data['specific_etf_allocation'].keys()] +
-    [etf for data in portfolio_data_esg_active.values() for etf in data['specific_etf_allocation'].keys()] + # این خط از روی فایل شما برداشت شده، اگر سبد بهینه سازی شده ندارید باید حذف شود.
-    ['^IRX'] # Add ^IRX for risk-free rate
-)))
-
 
 # --- Portfolio Data (for fixed allocation scenario) ---
 # This data will be used if Q11 and Q12 are both "yes"
