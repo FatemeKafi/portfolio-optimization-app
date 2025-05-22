@@ -61,43 +61,6 @@ portfolio_data_fixed = {
     },
 }
 
-# --- Portfolio Data for ESG/ACTIVE FIXED ALLOCATION (when Q11 or Q12 are YES) ---
-# تیکرهای ESG/Active نیز به دقت بررسی شدند.
-portfolio_data_esg_active = {
-    2: {
-        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.45, 'EAGG': 0.41, 'VCEB': 0.14}
-    },
-    3: {
-        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Real Estate': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.36, 'VCEB': 0.14}
-    },
-    4: {
-        'category_allocation': {'Bond': 0.89, 'Equity': 0.11, 'Real Estate': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.4493, 'EAGG': 0.1902, 'VCEB': 0.2591, 'ESGV': 0.0507, 'USSG': 0.0507}
-    },
-    5: {
-        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.133, 'EAGG': 0.133, 'VCEB': 0.134, 'ESGV': 0.30, 'USSG': 0.30}
-    },
-    6: {
-        'category_allocation': {'Bond': 0.63, 'Equity': 0.37, 'Real Estate': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.061 ,'EAGG': 0.3764, 'VCEB': 0.19, 'USSG': 0.1863, 'ESGU': 0.1863}
-    },
-    7: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 1.0, 'Real Estate': 0.0},
-        'specific_etf_allocation': {'ESGV': 0.1, 'USSG': 0.55, 'ESGU': 0.35}
-    },
-    8: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.61, 'Real Estate': 0.39},
-        'specific_etf_allocation': {'ESGV': 0.2535, 'USSG': 0.2265, 'ESGU': 0.2335, 'GRES':0.1365, 'NURE':0.15}
-    },
-    9: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10},
-        'specific_etf_allocation': {'ESGV': 0.3353, 'USSG': 0.3353, 'ESGU': 0.30, 'GRES':0.1647, 'NURE':0.1647}
-    },
-}
-
 # --- Portfolio Data (for optimization scenario, from mean_var_esg.py) ---
 # This data defines the universe of assets available for optimization for each risk level
 risk_level_assets = {
