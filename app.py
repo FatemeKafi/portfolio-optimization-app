@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from datetime import datetime
 import numpy as np
-from scipy.optimize import minimize # Kept for consistency, but not used in this specific fixed allocation logic
+from scipy.optimize import minimize
 import os
 
 # --- Risk Questionnaire Definitions ---
@@ -373,8 +373,8 @@ elif st.session_state.page == 'questionnaire':
                                        key=f'q{i}',
                                        index=default_index)
             
-            # Store selected option in session state for persistence
-            st.session_state[f'q{i}'] = selected_option
+            # --- این خط حذف شد، زیرا Streamlit به طور خودکار مقدار را در session_state ذخیره می کند ---
+            # st.session_state[f'q{i}'] = selected_option 
             
             answer_idx = question_data['options'].index(selected_option)
             score = question_data['scores'][answer_idx]
@@ -390,9 +390,11 @@ elif st.session_state.page == 'questionnaire':
     if submitted_answers:
         st.session_state.risk_score = total_score
         # Q11: "Yes, I want a portfolio with sustainable investments" is index 0
-        st.session_state.q11_pref = (answer_q11_idx == 0 and questions[11]["options"][answer_q11_idx] == "Yes, I want a portfolio with sustainable investments")
+        # Use st.session_state[f'q11'] directly as it's set by the st.radio
+        st.session_state.q11_pref = (st.session_state.get('q11') == "Yes, I want a portfolio with sustainable investments")
         # Q12: "Yes, I want an active strategy" is index 0
-        st.session_state.q12_pref = (answer_q12_idx == 0 and questions[12]["options"][answer_q12_idx] == "Yes, I want an active strategy")
+        # Use st.session_state[f'q12'] directly as it's set by the st.radio
+        st.session_state.q12_pref = (st.session_state.get('q12') == "Yes, I want an active strategy")
 
         st.subheader("Your Risk Profile Assessment")
         st.write(f"Your total score is: {st.session_state.risk_score}")
@@ -598,4 +600,4 @@ elif st.session_state.page == 'results':
     st.markdown("---")
     if st.button("Start Over"):
         st.session_state.clear() # Clear all session state variables
-        st.rerun()
+        st.rerun() # Use st.rerun() instead of st.experimental_rerun()
