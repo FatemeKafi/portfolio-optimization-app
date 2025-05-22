@@ -2,11 +2,11 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
+import matplotlib.colors as mcolors # Import for potential future use or consistency
 from datetime import datetime
 import numpy as np
 from scipy.optimize import minimize
-import os
+import os # For checking if openpyxl is available
 
 # --- Risk Questionnaire Definitions ---
 questions = {
@@ -40,10 +40,10 @@ portfolio_data_fixed = {
     },
     5: {
         'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00,'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BOND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625} # Corrected VTI from 0375 to 0.0375
+        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BOND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625}
     },
     6: {
-        'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00}, # Corrected ' Real Estate' to 'Real Estate'
+        'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00},
         'specific_etf_allocation': {'SHY': 0.0 ,'AGG': 0.3085 ,'BOND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415}
     },
     7: {
@@ -65,8 +65,8 @@ portfolio_data_fixed = {
 risk_level_assets_optimized = {
     2: ['SUSB','EAGG','VCEB'],
     3: ['SUSB','EAGG','VCEB'],
-    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU back for ESG consideration
-    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU back for ESG consideration
+    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU, removed VOO from the user's initial optimized list. VOO is in fixed.
+    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU, removed VOO from the user's initial optimized list. VOO is in fixed.
     6: ['SUSB', 'EAGG', 'ESGV', 'USSG', 'ESGU'],
     7: ['ESGV','USSG','ESGU'],
     8: ['ESGV','USSG','ESGU','GRES','NURE'],
@@ -74,8 +74,9 @@ risk_level_assets_optimized = {
 }
 
 # Mapping ETFs to their categories (used in both scenarios for plotting)
+# Ensure all ETFs in both fixed and optimized lists are covered here
 etf_to_category = {
-    # Fixed Portfolio ETFs (ensure all new ones are here)
+    # Fixed Portfolio ETFs
     'SHY': 'Bond', 'AGG': 'Bond', 'BOND': 'Bond',
     'VTI': 'Equity', 'SPLG': 'Equity', 'VOO': 'Equity',
     'XLRE': 'Real Estate', 'SCHH': 'Real Estate',
@@ -84,6 +85,7 @@ etf_to_category = {
     'SUSB': 'Bond', 'EAGG': 'Bond', 'VCEB': 'Bond',
     'ESGV': 'Equity', 'USSG': 'Equity', 'ESGU': 'Equity',
     'GRES': 'Real Estate', 'NURE': 'Real Estate',
+    # Ensure any new ESG/Active specific tickers are mapped if they exist in the optimization list
 }
 
 # Define all unique tickers across both fixed and optimized portfolios, plus risk-free rate
@@ -161,6 +163,10 @@ def download_historical_prices(tickers, start_date, end_date):
         if '^IRX' in price_data.columns: # Check if '^IRX' is in the final price_data
             rf_series = price_data['^IRX'].dropna()
             if not rf_series.empty:
+                # نرخ بدون ریسک روزانه را به سالانه تبدیل کنید.
+                # (1 + روزانه)^252 - 1
+                # برای ^IRX که T-bill rate است، اغلب به صورت سالانه یا با تناوب مشخصی ارائه می‌شود.
+                # اگر این نرخ را به عنوان نرخ روزانه فرض کنیم:
                 daily_risk_free_rate = rf_series.mean() / 100.0 / 252 # Convert to daily rate if ^IRX is annual in data
                 risk_free_rate_annual = (1 + daily_risk_free_rate)**252 - 1
                 st.info(f"Calculated Annual Risk-Free Rate: {risk_free_rate_annual*100:.2f}%")
@@ -244,28 +250,10 @@ def optimize_portfolio(returns_df, tickers, risk_free_rate_annual):
 
 def calculate_portfolio_returns_and_sharpe(prices_df, specific_allocation, risk_free_rate_annual):
     portfolio_tickers = list(specific_allocation.keys())
-    # Filter prices_df to only include tickers that are actually in the prices_df columns
-    available_portfolio_tickers = [t for t in portfolio_tickers if t in prices_df.columns]
-
-    if not available_portfolio_tickers:
-        st.warning(f"No valid historical price data available for any of the tickers in the specified allocation.")
-        return None, None, None, None
-
-    # Recreate specific_allocation with only available tickers and re-normalize
-    filtered_specific_allocation = {ticker: specific_allocation[ticker] for ticker in available_portfolio_tickers}
-    total_filtered_weight = sum(filtered_specific_allocation.values())
-    if total_filtered_weight == 0:
-        st.warning("All filtered weights sum to zero. Cannot calculate portfolio returns.")
-        return None, None, None, None
-    
-    # Normalize weights to sum to 1 only for available tickers
-    normalized_specific_allocation = {ticker: weight / total_filtered_weight for ticker, weight in filtered_specific_allocation.items()}
-
-
-    available_prices = prices_df[available_portfolio_tickers].dropna(axis=0, how='any')
+    available_prices = prices_df[portfolio_tickers].dropna(axis=0, how='any')
 
     if available_prices.empty or len(available_prices) < 2:
-        st.warning(f"Not enough valid historical price data for portfolio {available_portfolio_tickers} after filtering missing data.")
+        st.warning(f"Not enough valid historical price data for portfolio {portfolio_tickers}.")
         return None, None, None, None
 
     daily_returns_assets = available_prices.pct_change().dropna()
@@ -274,18 +262,15 @@ def calculate_portfolio_returns_and_sharpe(prices_df, specific_allocation, risk_
         st.warning("Could not calculate daily returns for assets in the portfolio.")
         return None, None, None, None
 
-    # Ensure weights are aligned with daily_returns_assets columns
-    weights_series = pd.Series(normalized_specific_allocation).reindex(daily_returns_assets.columns).fillna(0)
-    # The normalization ensures weights_series.sum() is already 1 for available assets.
-    # No need for weights_series = weights_series / weights_series.sum() here if normalization was done above.
-    
+    weights_series = pd.Series(specific_allocation).reindex(daily_returns_assets.columns).fillna(0)
+    if weights_series.sum() == 0:
+        st.warning("All weights are zero after reindexing. Cannot calculate portfolio returns.")
+        return None, None, None, None
+    weights_series = weights_series / weights_series.sum() # Ensure weights sum to 1 after reindexing
+
     portfolio_daily_returns = (daily_returns_assets * weights_series).sum(axis=1)
 
     portfolio_cumulative_growth = (1 + portfolio_daily_returns).cumprod()
-    if portfolio_cumulative_growth.empty:
-        st.warning("Cumulative growth could not be calculated (empty series).")
-        return None, None, None, None
-        
     total_cumulative_return = (portfolio_cumulative_growth.iloc[-1] - 1) * 100
 
     first_date_data = portfolio_cumulative_growth.index[0]
@@ -294,17 +279,7 @@ def calculate_portfolio_returns_and_sharpe(prices_df, specific_allocation, risk_
 
     if time_delta_days > 0:
         num_years = time_delta_days / 365.25
-        # Prevent division by zero if num_years is extremely small
-        if num_years == 0:
-            annualized_cumulative_return = total_cumulative_return
-        else:
-            # Handle potential negative values inside power for small numbers (e.g., -0.001)
-            base = (1 + (total_cumulative_return / 100))
-            if base <= 0: # If cumulative return leads to base <= 0, annualized can't be calculated this way
-                annualized_cumulative_return = total_cumulative_return # Fallback or handle appropriately
-                st.warning("Cannot annualize return with negative or zero base (1 + total_cumulative_return / 100).")
-            else:
-                annualized_cumulative_return = (base**(1/num_years) - 1) * 100
+        annualized_cumulative_return = ((1 + (total_cumulative_return / 100))**(1/num_years) - 1) * 100
     else:
         annualized_cumulative_return = total_cumulative_return
 
@@ -370,7 +345,7 @@ if st.session_state.page == 'info':
                 }
                 st.success(f"Welcome, {user_name}! Let's start the questionnaire.")
                 st.session_state.page = 'questionnaire'
-                st.rerun()
+                st.rerun() # Rerun to go to the next page
             else:
                 st.error("Please fill in all personal information fields.")
 
@@ -387,18 +362,10 @@ elif st.session_state.page == 'questionnaire':
     with st.form("risk_questionnaire_form"):
         for i in range(1, 13):
             question_data = questions[i]
-            # Ensure the default index is within bounds of options
-            default_index = 0
-            if f'q{i}' in st.session_state:
-                try:
-                    default_index = question_data['options'].index(st.session_state[f'q{i}'])
-                except ValueError:
-                    default_index = 0 # Fallback if stored value is not in options
-            
             selected_option = st.radio(f"Question {i}: {question_data['question']}",
                                        question_data['options'],
                                        key=f'q{i}',
-                                       index=default_index)
+                                       index=0) # Default to first option
             
             answer_idx = question_data['options'].index(selected_option)
             score = question_data['scores'][answer_idx]
@@ -479,7 +446,7 @@ elif st.session_state.page == 'results':
         st.error("Could not determine a valid risk level. Please go back to the questionnaire.")
         if st.button("Go Back to Questionnaire"):
             st.session_state.page = 'questionnaire'
-            st.rerun()
+            st.rerun() # Changed from st.experimental_rerun()
         st.stop()
 
     # Define the fixed historical analysis period for returns and Sharpe Ratio
@@ -492,12 +459,11 @@ elif st.session_state.page == 'results':
     )
 
     if prices_for_portfolios.empty or returns_data.empty:
-        st.error("Cannot proceed with portfolio analysis due to data issues. Please check ticker symbols and date range for data availability.")
+        st.error("Cannot proceed with portfolio analysis due to data issues.")
         st.stop()
     
     # Check if the user selected YES for Q11 or Q12 to trigger optimization
-    # The condition is: if ESG or Active is preferred, use optimized. ELSE, use fixed.
-    if prefers_esg or prefers_active_strategy: # User wants an ESG/Active portfolio (optimized)
+    if prefers_esg or prefers_active_strategy:
         st.subheader(f"Sharpe Ratio Optimized Portfolio for Risk Level {determined_risk_level}")
         
         # Use the optimized assets list
@@ -505,85 +471,37 @@ elif st.session_state.page == 'results':
         available_tickers_for_optimization = [t for t in selected_tickers_for_optimization if t in returns_data.columns and not returns_data[t].isnull().all()]
 
         if not available_tickers_for_optimization:
-            st.warning(f"No usable historical data for any of the optimized tickers ({selected_tickers_for_optimization}) in risk level {determined_risk_level}. Falling back to fixed portfolio if available.")
-            # Force falling back to fixed portfolio
-            prefers_esg = False 
-            prefers_active_strategy = False
-            st.rerun() # Rerun to hit the else condition below immediately
-
-        elif len(available_tickers_for_optimization) == 0: # Explicitly check for empty list
-             st.warning(f"No usable assets for optimization in risk level {determined_risk_level}. Falling back to fixed portfolio if available.")
-             prefers_esg = False
-             prefers_active_strategy = False
-             st.rerun()
-
-        elif len(available_tickers_for_optimization) == 1:
-            optimal_allocation = {available_tickers_for_optimization[0]: 1.0}
-            st.info(f"Only one asset ({available_tickers_for_optimization[0]}) available for optimization. Allocating 100% to it.")
+            st.warning(f"No usable historical data for any of the tickers ({selected_tickers_for_optimization}) in risk level {determined_risk_level} for optimization. Displaying default fixed portfolio if available.")
             
-            if optimal_allocation: # Proceed with displaying the 1-asset portfolio
-                st.write("### Optimal Portfolio Allocation (ETFs):")
-                allocation_df = pd.DataFrame(optimal_allocation.items(), columns=['ETF', 'Weight'])
-                allocation_df['Weight (%)'] = allocation_df['Weight'] * 100
-                st.dataframe(allocation_df[['ETF', 'Weight (%)']].set_index('ETF'))
-
-                category_allocation_optimized = {cat: 0.0 for cat in set(etf_to_category.values())}
-                for etf, weight in optimal_allocation.items():
-                    category = etf_to_category.get(etf)
-                    if category:
-                        category_allocation_optimized[category] += weight
-                category_allocation_optimized = {cat: weight for cat, weight in category_allocation_optimized.items() if weight > 0.001}
-                
-                fig_cat = plot_pie_chart_with_details(category_allocation_optimized, f'Optimized Portfolio Allocation by Category (Risk Level {determined_risk_level})')
-                if fig_cat:
-                    st.pyplot(fig_cat)
-                    plt.close(fig_cat)
-
-                total_ret, annualized_ret, sharpe_ratio, portfolio_cumulative_growth_indexed = calculate_portfolio_returns_and_sharpe(
-                    prices_for_portfolios, optimal_allocation, risk_free_rate_annual
-                )
-                if total_ret is not None:
-                    st.write("### Portfolio Performance Metrics:")
-                    st.write(f"Total Cumulative Return ({analysis_start_date} to {analysis_end_date}): **{total_ret:.2f}%**")
-                    st.write(f"Annualized Cumulative Return: **{annualized_ret:.2f}%**")
-                    if sharpe_ratio is not None:
-                        st.write(f"Annualized Sharpe Ratio: **{sharpe_ratio:.2f}**")
-                    else:
-                        st.warning("Sharpe Ratio could not be calculated (e.g., zero volatility or data issues).")
-
-                    if portfolio_cumulative_growth_indexed is not None and not portfolio_cumulative_growth_indexed.empty:
-                        fig_growth, ax_growth = plt.subplots(figsize=(12, 6))
-                        ax_growth.plot(portfolio_cumulative_growth_indexed.index, portfolio_cumulative_growth_indexed.values)
-                        ax_growth.set_title('Portfolio Performance Over Time (Indexed to 100)')
-                        ax_growth.set_xlabel('Date')
-                        ax_growth.set_ylabel('Portfolio Value (Indexed)')
-                        ax_growth.grid(True)
-                        st.pyplot(fig_growth)
-                        plt.close(fig_growth)
-                        
-                        if openpyxl_available:
-                            import io
-                            output = io.BytesIO()
-                            portfolio_cumulative_growth_indexed.to_excel(output, header=True, index=True)
-                            output.seek(0)
-                            st.download_button(
-                                label=f"Download Optimized Portfolio Growth Data ({determined_risk_level}) as Excel",
-                                data=output,
-                                file_name=f"optimized_portfolio_growth_risk_{determined_risk_level}.xlsx",
-                                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                            )
-                        else:
-                            st.info("Install 'openpyxl' (`pip install openpyxl`) to enable Excel download.")
-                    else:
-                        st.warning("Could not calculate or plot portfolio value history.")
-                else:
-                    st.warning("Could not calculate portfolio performance metrics due to data issues.")
+            # Fallback to fixed portfolio if optimization is not possible due to data
+            if determined_risk_level in portfolio_data_fixed:
+                st.warning("Falling back to fixed portfolio due to insufficient data for optimization.")
+                prefers_esg = False # Force fixed path
+                prefers_active_strategy = False # Force fixed path
+                # Re-run this part to enter the else block immediately
+                # This will go to the fixed portfolio section.
+                st.rerun() # Changed from st.experimental_rerun()
             else:
-                st.error("Optimization for a single asset produced no valid allocation.")
+                st.error("No valid portfolio can be generated with available data and preferences.")
+                st.stop() # Stop if no fallback is possible
 
-
-        else: # More than one asset for optimization
-            optimal_allocation = optimize_portfolio(returns_data, available_tickers_for_optimization, risk_free_rate_annual)
+        elif len(available_tickers_for_optimization) < 1: # This condition is technically redundant with the 'not available_tickers_for_optimization' but kept for clarity
+            st.warning(f"Not enough unique assets for optimization in risk level {determined_risk_level}. Displaying default fixed portfolio if available.")
+            if determined_risk_level in portfolio_data_fixed:
+                st.warning("Falling back to fixed portfolio due to insufficient assets for optimization.")
+                prefers_esg = False # Force fixed path
+                prefers_active_strategy = False # Force fixed path
+                st.rerun() # Changed from st.experimental_rerun()
+            else:
+                st.error("No valid portfolio can be generated with available data and preferences.")
+                st.stop()
+        else:
+            optimal_allocation = None
+            if len(available_tickers_for_optimization) == 1:
+                optimal_allocation = {available_tickers_for_optimization[0]: 1.0}
+                st.info(f"Only one asset ({available_tickers_for_optimization[0]}) available for optimization. Allocating 100% to it.")
+            else:
+                optimal_allocation = optimize_portfolio(returns_data, available_tickers_for_optimization, risk_free_rate_annual)
 
             if optimal_allocation and sum(optimal_allocation.values()) > 0:
                 st.write("### Optimal Portfolio Allocation (ETFs):")
@@ -710,19 +628,14 @@ elif st.session_state.page == 'results':
             if category_total_weight_in_portfolio > 0.001:
                 if len(allocation_dict) > 1:
                     # Normalize allocation within the category for the pie chart
-                    # Ensure sum is not zero before division
-                    current_sum_weights = sum(allocation_dict.values())
-                    if current_sum_weights > 0:
-                        normalized_allocation_dict = {etf: weight / current_sum_weights for etf, weight in allocation_dict.items()}
-                        fig_detail = plot_pie_chart_with_details(normalized_allocation_dict,
-                                                                f'Fixed Detailed Allocation within {category}')
-                        if fig_detail:
-                            st.pyplot(fig_detail)
-                            plt.close(fig_detail)
-                        else:
-                            st.write(f"No detailed plot for {category} due to insufficient data.")
+                    normalized_allocation_dict = {etf: weight / sum(allocation_dict.values()) for etf, weight in allocation_dict.items()}
+                    fig_detail = plot_pie_chart_with_details(normalized_allocation_dict,
+                                                            f'Fixed Detailed Allocation within {category}')
+                    if fig_detail:
+                        st.pyplot(fig_detail)
+                        plt.close(fig_detail)
                     else:
-                         st.write(f"No detailed plot for {category} as allocated weights sum to zero.")
+                        st.write(f"No detailed plot for {category} due to insufficient data.")
                 elif len(allocation_dict) == 1:
                     etf, weight = list(allocation_dict.items())[0]
                     st.write(f"**{category}**: Contains only **{etf}** with **{weight*100:.2f}%** of the portfolio's {category} allocation.")
@@ -776,4 +689,4 @@ elif st.session_state.page == 'results':
     st.markdown("---")
     if st.button("Start Over"):
         st.session_state.clear() # Clear all session state variables
-        st.rerun()
+        st.rerun() # Rerun the app from scratch
