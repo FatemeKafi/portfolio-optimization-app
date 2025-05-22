@@ -63,7 +63,7 @@ portfolio_data_fixed = {
 
 # --- Portfolio Data (for optimization scenario, from mean_var_esg.py) ---
 # This data defines the universe of assets available for optimization for each risk level
-risk_level_assets = {
+risk_level_assets_optimized = {
     2: ['SHY','AGG','BOND',],
     3: ['SHY','AGG','BOND',],
     4: ['SHY','AGG','BOND','SPLG','VOO'],
