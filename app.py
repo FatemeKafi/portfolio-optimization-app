@@ -25,26 +25,28 @@ questions = {
 }
 
 # --- Portfolio Data for FIXED ALLOCATION (when Q11 and Q12 are NO) ---
+# تیکر BOND به BND تغییر یافت که یک ETF اوراق قرضه عمومی رایج است.
+# اطمینان از وجود داده برای ETF ها
 portfolio_data_fixed = {
     2: {
         'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BOND': 0.1}
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BND': 0.1} # Changed BOND to BND
     },
     3: {
         'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BOND': 0.25}
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BND': 0.25} # Changed BOND to BND
     },
     4: {
         'category_allocation': {'Bond': 0.85, 'Equity': 0.15, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BOND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075}
+        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075} # Changed BOND to BND
     },
     5: {
         'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00,'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BOND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625}
+        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625} # Changed BOND to BND
     },
     6: {
         'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.0 ,'AGG': 0.3085 ,'BOND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415}
+        'specific_etf_allocation': {'AGG': 0.3085 ,'BND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415} # Changed BOND to BND, removed SHY (as it was 0 anyway)
     },
     7: {
         'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10,'Crypto': 0.00},
@@ -61,6 +63,7 @@ portfolio_data_fixed = {
 }
 
 # --- Portfolio Data for ESG/ACTIVE FIXED ALLOCATION (when Q11 or Q12 are YES) ---
+# تیکرهای ESG/Active نیز به دقت بررسی شدند.
 portfolio_data_esg_active = {
     2: {
         'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00},
@@ -91,7 +94,7 @@ portfolio_data_esg_active = {
         'specific_etf_allocation': {'ESGV': 0.2535, 'USSG': 0.2265, 'ESGU': 0.2335, 'GRES':0.1365, 'NURE':0.15}
     },
     9: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10}, # Corrected category to Real Estate
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10},
         'specific_etf_allocation': {'ESGV': 0.3353, 'USSG': 0.3353, 'ESGU': 0.30, 'GRES':0.1647, 'NURE':0.1647}
     },
 }
@@ -99,7 +102,7 @@ portfolio_data_esg_active = {
 # Mapping ETFs to their categories (used in both scenarios for plotting)
 etf_to_category = {
     # Fixed Portfolio ETFs
-    'SHY': 'Bond', 'AGG': 'Bond', 'BOND': 'Bond',
+    'SHY': 'Bond', 'AGG': 'Bond', 'BND': 'Bond', # Changed BOND to BND
     'VTI': 'Equity', 'SPLG': 'Equity', 'VOO': 'Equity',
     'XLRE': 'Real Estate', 'SCHH': 'Real Estate',
     'GBTC': 'Crypto',
@@ -107,7 +110,7 @@ etf_to_category = {
     'SUSB': 'Bond', 'EAGG': 'Bond', 'VCEB': 'Bond',
     'ESGV': 'Equity', 'USSG': 'Equity', 'ESGU': 'Equity',
     'GRES': 'Real Estate', 'NURE': 'Real Estate',
-    'IBIT': 'Crypto', # Assuming IBIT is Crypto/Equity - adjusted to Crypto for consistency with GBTC
+    'IBIT': 'Crypto', 
 }
 
 # Define all unique tickers across both fixed portfolio sets, plus risk-free rate
@@ -201,12 +204,14 @@ def download_historical_prices(tickers, start_date, end_date):
             if not rf_series.empty:
                 # ^IRX is typically annualized percentage yield (e.g., 4.5 for 4.5%). Convert to decimal.
                 risk_free_rate_annual = rf_series.mean() / 100.0
-                st.info(f"Calculated Average Annual Risk-Free Rate: {risk_free_rate_annual*100:.2f}%")
+                st.info(f"Calculated Average Annual Risk-Free Rate from ^IRX: {risk_free_rate_annual*100:.2f}%")
             else:
-                st.warning("No valid risk-free rate data (^IRX) for the specified period. Using 0 as risk-free rate for Sharpe calculation.")
+                st.warning("No valid risk-free rate data (^IRX) for the specified period. Using default 2% as risk-free rate for Sharpe calculation.")
+                risk_free_rate_annual = 0.02 # Default to 2% if ^IRX data is missing or empty
         else:
-            st.warning("'^IRX' ticker not found in downloaded data. Using 0 as risk-free rate for Sharpe calculation.")
-        
+            st.warning("'^IRX' ticker not found in downloaded data. Using default 2% as risk-free rate for Sharpe calculation.")
+            risk_free_rate_annual = 0.02 # Default to 2% if ^IRX is not in tickers
+
         # Remove '^IRX' from the main prices DataFrame that will be used for portfolio asset calculations
         prices_for_portfolios = price_data.drop(columns=['^IRX'], errors='ignore')
         
@@ -356,8 +361,7 @@ if st.session_state.page == 'info':
 elif st.session_state.page == 'questionnaire':
     st.header(f"2. Risk Questionnaire for {st.session_state.user_info.get('name', 'User')}") # Use .get for robustness
     total_score = 0
-    answer_q11_idx = None
-    answer_q12_idx = None
+    # No need for answer_q11_idx, answer_q12_idx as we read directly from session_state.get()
 
     with st.form("risk_questionnaire_form"):
         for i in range(1, 13):
@@ -368,32 +372,39 @@ elif st.session_state.page == 'questionnaire':
             if f'q{i}' in st.session_state and st.session_state[f'q{i}'] in question_data['options']:
                 default_index = question_data['options'].index(st.session_state[f'q{i}'])
             
+            # `st.radio` automatically sets the value to st.session_state[key]
             selected_option = st.radio(f"Question {i}: {question_data['question']}",
                                        question_data['options'],
                                        key=f'q{i}',
                                        index=default_index)
             
-            # --- این خط حذف شد، زیرا Streamlit به طور خودکار مقدار را در session_state ذخیره می کند ---
-            # st.session_state[f'q{i}'] = selected_option 
-            
-            answer_idx = question_data['options'].index(selected_option)
-            score = question_data['scores'][answer_idx]
-            total_score += score
-            
-            if i == 11:
-                answer_q11_idx = answer_idx
-            elif i == 12:
-                answer_q12_idx = answer_idx
-        
+            # Score calculation should use the actual value from session_state, not selected_option directly
+            # After form submission, the value is already in session_state
+            # When the form is submitted, the values are updated in st.session_state.
+            # We calculate total_score *after* submission.
+
         submitted_answers = st.form_submit_button("Calculate My Risk Profile")
 
     if submitted_answers:
+        # Calculate total score AFTER form submission based on values in st.session_state
+        total_score = 0
+        for i in range(1, 13):
+            question_data = questions[i]
+            # Use .get to safely retrieve the value from session_state
+            selected_option_for_scoring = st.session_state.get(f'q{i}') 
+            if selected_option_for_scoring in question_data['options']:
+                answer_idx = question_data['options'].index(selected_option_for_scoring)
+                score = question_data['scores'][answer_idx]
+                total_score += score
+            else:
+                # Fallback if somehow a question's state is not properly set
+                st.warning(f"Could not retrieve a valid answer for Question {i} to calculate score.")
+                total_score += question_data['scores'][0] # Default to first option's score
+
         st.session_state.risk_score = total_score
-        # Q11: "Yes, I want a portfolio with sustainable investments" is index 0
-        # Use st.session_state[f'q11'] directly as it's set by the st.radio
+        
+        # Q11 and Q12 preferences are also read from session_state
         st.session_state.q11_pref = (st.session_state.get('q11') == "Yes, I want a portfolio with sustainable investments")
-        # Q12: "Yes, I want an active strategy" is index 0
-        # Use st.session_state[f'q12'] directly as it's set by the st.radio
         st.session_state.q12_pref = (st.session_state.get('q12') == "Yes, I want an active strategy")
 
         st.subheader("Your Risk Profile Assessment")
@@ -472,6 +483,7 @@ elif st.session_state.page == 'results':
         all_unique_tickers_for_download, analysis_start_date, analysis_end_date
     )
 
+    # Check if download was successful and data is available
     if prices_for_portfolios.empty or returns_data.empty:
         st.error("Cannot proceed with portfolio analysis due to data issues. Please check ticker symbols and date range for data availability. Ensure data covers the selected period.")
         st.stop()
@@ -600,4 +612,4 @@ elif st.session_state.page == 'results':
     st.markdown("---")
     if st.button("Start Over"):
         st.session_state.clear() # Clear all session state variables
-        st.rerun() # Use st.rerun() instead of st.experimental_rerun()
+        st.rerun()
