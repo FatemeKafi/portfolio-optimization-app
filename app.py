@@ -24,49 +24,50 @@ questions = {
     12: {"question": "Do you have any preference for the investment strategy of your Roboadvisor?", "options": ["Yes, I want an active strategy", "No, I want a passive strategy"], "scores": [4, 1]}
 }
 
-# --- Portfolio Data (for fixed allocation scenario - when Q11 and Q12 are NO) ---
+# --- Portfolio Data (for fixed allocation scenario) ---
+# This data will be used if Q11 and Q12 are both "yes"
 portfolio_data_fixed = {
     2: {
-        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BOND': 0.1}
+        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.45, 'EAGG': 0.41, 'VCEB': 0.14}
     },
     3: {
-        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BOND': 0.25}
+        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.36, 'VCEB': 0.14}
     },
     4: {
-        'category_allocation': {'Bond': 0.85, 'Equity': 0.15, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BOND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075}
+        'category_allocation': {'Bond': 0.89, 'Equity': 0.11, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.4493, 'EAGG': 0.1902, 'VCEB': 0.2591, 'ESGV': 0.0507, 'USSG': 0.0507}
     },
     5: {
-        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00,'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BOND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625}
+        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.133, 'EAGG': 0.133, 'VCEB': 0.134, 'ESGV': 0.30, 'USSG': 0.30}
     },
     6: {
-        'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.0 ,'AGG': 0.3085 ,'BOND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415}
+        'category_allocation': {'Bond': 0.63, 'Equity': 0.37, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.061 ,'EAGG': 0.3764, 'VCEB': 0.19, 'USSG': 0.1863, 'ESGU': 0.1863}
     },
     7: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10,'Crypto': 0.00},
-        'specific_etf_allocation': {'VTI':0.21 , 'SPLG':0.2422 , 'VOO':0.4522, 'XLRE':0.0478 ,'SCHH':0.0478 }
+        'category_allocation': {'Bond': 0.00, 'Equity': 1.0, 'Others': 0.0},
+        'specific_etf_allocation': {'ESGV': 0.1, 'USSG': 0.55, 'ESGU': 0.35}
     },
     8: {
-        'category_allocation': {'Bond': 0.0, 'Equity': 0.7, 'Real Estate': 0.30,'Crypto': 0.00},
-        'specific_etf_allocation': {'VTI': 0.2822, 'SPLG': 0.1422 , 'VOO': 0.2822, 'XLRE':0.1467 ,'SCHH':0.1467}
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.61, 'Others': 0.39},
+        'specific_etf_allocation': {'ESGV': 0.2535, 'USSG': 0.2265, 'ESGU': 0.2335, 'GRES':0.1365, 'NURE':0.15}
     },
     9: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.65, 'Real Estate': 0.3, 'Crypto': 0.05},
-        'specific_etf_allocation': {'VTI': 0.195, 'SPLG':0.13 , 'VOO': 0.325, 'XLRE':0.195 ,'SCHH':0.105, 'GBTC': 0.05}
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10, 'Cash': 0.00},
+        'specific_etf_allocation': {'ESGV': 0.3353, 'USSG': 0.3353, 'ESGU': 0.30, 'GRES':0.1647, 'NURE':0.1647}
     },
 }
 
-# --- Portfolio Data (for optimization scenario - when Q11 or Q12 are YES) ---
+# --- Portfolio Data (for optimization scenario, from mean_var_esg.py) ---
 # This data defines the universe of assets available for optimization for each risk level
 risk_level_assets_optimized = {
     2: ['SUSB','EAGG','VCEB'],
     3: ['SUSB','EAGG','VCEB'],
-    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU, removed VOO from the user's initial optimized list. VOO is in fixed.
-    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'], # Added ESGU, removed VOO from the user's initial optimized list. VOO is in fixed.
+    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'],
+    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'],
     6: ['SUSB', 'EAGG', 'ESGV', 'USSG', 'ESGU'],
     7: ['ESGV','USSG','ESGU'],
     8: ['ESGV','USSG','ESGU','GRES','NURE'],
@@ -74,18 +75,10 @@ risk_level_assets_optimized = {
 }
 
 # Mapping ETFs to their categories (used in both scenarios for plotting)
-# Ensure all ETFs in both fixed and optimized lists are covered here
 etf_to_category = {
-    # Fixed Portfolio ETFs
-    'SHY': 'Bond', 'AGG': 'Bond', 'BOND': 'Bond',
-    'VTI': 'Equity', 'SPLG': 'Equity', 'VOO': 'Equity',
-    'XLRE': 'Real Estate', 'SCHH': 'Real Estate',
-    'GBTC': 'Crypto',
-    # Optimized Portfolio ETFs (from previous structure, assuming ESG focused)
     'SUSB': 'Bond', 'EAGG': 'Bond', 'VCEB': 'Bond',
-    'ESGV': 'Equity', 'USSG': 'Equity', 'ESGU': 'Equity',
-    'GRES': 'Real Estate', 'NURE': 'Real Estate',
-    # Ensure any new ESG/Active specific tickers are mapped if they exist in the optimization list
+    'ESGV': 'Equity', 'USSG': 'Equity', 'ESGU': 'Equity', 'VOO': 'Equity', 'IBIT': 'Equity',
+    'XLRE': 'Real Estate', 'SCHH': 'Real Estate',
 }
 
 # Define all unique tickers across both fixed and optimized portfolios, plus risk-free rate
@@ -100,7 +93,7 @@ def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f
     labels = []
     sizes = []
     for label, size in data_dict.items():
-        if size > 0.001: # Filter out very small allocations for clarity
+        if size > 0.001:
             labels.append(label)
             sizes.append(size)
 
@@ -125,14 +118,16 @@ def download_historical_prices(tickers, start_date, end_date):
     """Downloads historical 'Adj Close' price data from Yahoo Finance for a given period."""
     if not tickers:
         st.error("No tickers provided for download.")
-        return pd.DataFrame(), pd.DataFrame(), 0.0
+        #
+        return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
     st.info(f"Downloading historical data for {tickers} from {start_date} to {end_date}...")
     try:
         data = yf.download(tickers, start=start_date, end=end_date, progress=False)
         if data.empty:
             st.error("No data downloaded. Check ticker symbols or date range.")
-            return pd.DataFrame(), pd.DataFrame(), 0.0
+    
+            return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
         if 'Adj Close' in data.columns:
             price_data = data['Adj Close']
@@ -145,8 +140,7 @@ def download_historical_prices(tickers, start_date, end_date):
             elif isinstance(data, pd.Series):
                 price_data = data
             else:
-                st.error(f"Could not find 'Adj Close' or 'Close' prices for {tickers}.")
-                return pd.DataFrame(), pd.DataFrame(), 0.0
+                return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
         if isinstance(price_data, pd.Series): # Ensure it's a DataFrame for consistency
             price_data = price_data.to_frame()
@@ -156,17 +150,14 @@ def download_historical_prices(tickers, start_date, end_date):
         
         if price_data.empty:
             st.error("After cleaning, no valid price data remains.")
-            return pd.DataFrame(), pd.DataFrame(), 0.0
+        
+            return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
         # --- risk_free_rate_annual ---
         risk_free_rate_annual = 0.0
         if '^IRX' in price_data.columns: # Check if '^IRX' is in the final price_data
             rf_series = price_data['^IRX'].dropna()
             if not rf_series.empty:
-                # نرخ بدون ریسک روزانه را به سالانه تبدیل کنید.
-                # (1 + روزانه)^252 - 1
-                # برای ^IRX که T-bill rate است، اغلب به صورت سالانه یا با تناوب مشخصی ارائه می‌شود.
-                # اگر این نرخ را به عنوان نرخ روزانه فرض کنیم:
                 daily_risk_free_rate = rf_series.mean() / 100.0 / 252 # Convert to daily rate if ^IRX is annual in data
                 risk_free_rate_annual = (1 + daily_risk_free_rate)**252 - 1
                 st.info(f"Calculated Annual Risk-Free Rate: {risk_free_rate_annual*100:.2f}%")
@@ -181,7 +172,8 @@ def download_historical_prices(tickers, start_date, end_date):
         return prices_for_portfolios, returns_data, risk_free_rate_annual
     except Exception as e:
         st.error(f"Error downloading or processing data: {e}")
-        return pd.DataFrame(), pd.DataFrame(), 0.0
+
+        return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
 
 def portfolio_variance(weights, covariance):
@@ -237,8 +229,8 @@ def optimize_portfolio(returns_df, tickers, risk_free_rate_annual):
         if portfolio_allocation_raw:
             total_weight = sum(portfolio_allocation_raw.values())
             if total_weight > 0 :
-                    portfolio_allocation_final = {ticker: weight / total_weight for ticker, weight in portfolio_allocation_raw.items()}
-                    return portfolio_allocation_final
+                 portfolio_allocation_final = {ticker: weight / total_weight for ticker, weight in portfolio_allocation_raw.items()}
+                 return portfolio_allocation_final
             else:
                 st.warning("Warning: All optimized weights are near zero after filtering. Optimization might not be meaningful.")
                 return None
@@ -363,9 +355,9 @@ elif st.session_state.page == 'questionnaire':
         for i in range(1, 13):
             question_data = questions[i]
             selected_option = st.radio(f"Question {i}: {question_data['question']}",
-                                       question_data['options'],
-                                       key=f'q{i}',
-                                       index=0) # Default to first option
+                                    question_data['options'],
+                                    key=f'q{i}',
+                                    index=0) # Default to first option
             
             answer_idx = question_data['options'].index(selected_option)
             score = question_data['scores'][answer_idx]
@@ -446,7 +438,7 @@ elif st.session_state.page == 'results':
         st.error("Could not determine a valid risk level. Please go back to the questionnaire.")
         if st.button("Go Back to Questionnaire"):
             st.session_state.page = 'questionnaire'
-            st.rerun() # Changed from st.experimental_rerun()
+            st.experimental_rerun()
         st.stop()
 
     # Define the fixed historical analysis period for returns and Sharpe Ratio
@@ -462,11 +454,9 @@ elif st.session_state.page == 'results':
         st.error("Cannot proceed with portfolio analysis due to data issues.")
         st.stop()
     
-    # Check if the user selected YES for Q11 or Q12 to trigger optimization
     if prefers_esg or prefers_active_strategy:
         st.subheader(f"Sharpe Ratio Optimized Portfolio for Risk Level {determined_risk_level}")
         
-        # Use the optimized assets list
         selected_tickers_for_optimization = risk_level_assets_optimized.get(determined_risk_level, [])
         available_tickers_for_optimization = [t for t in selected_tickers_for_optimization if t in returns_data.columns and not returns_data[t].isnull().all()]
 
@@ -478,20 +468,16 @@ elif st.session_state.page == 'results':
                 st.warning("Falling back to fixed portfolio due to insufficient data for optimization.")
                 prefers_esg = False # Force fixed path
                 prefers_active_strategy = False # Force fixed path
-                # Re-run this part to enter the else block immediately
-                # This will go to the fixed portfolio section.
-                st.rerun() # Changed from st.experimental_rerun()
             else:
                 st.error("No valid portfolio can be generated with available data and preferences.")
                 st.stop() # Stop if no fallback is possible
 
-        elif len(available_tickers_for_optimization) < 1: # This condition is technically redundant with the 'not available_tickers_for_optimization' but kept for clarity
+        elif len(available_tickers_for_optimization) < 1:
             st.warning(f"Not enough unique assets for optimization in risk level {determined_risk_level}. Displaying default fixed portfolio if available.")
             if determined_risk_level in portfolio_data_fixed:
                 st.warning("Falling back to fixed portfolio due to insufficient assets for optimization.")
                 prefers_esg = False # Force fixed path
                 prefers_active_strategy = False # Force fixed path
-                st.rerun() # Changed from st.experimental_rerun()
             else:
                 st.error("No valid portfolio can be generated with available data and preferences.")
                 st.stop()
@@ -536,7 +522,7 @@ elif st.session_state.page == 'results':
                         if len(allocation_dict) > 1:
                             normalized_allocation_dict = {etf: weight / category_total_weight_in_portfolio for etf, weight in allocation_dict.items()}
                             fig_detail = plot_pie_chart_with_details(normalized_allocation_dict,
-                                                                      f'Optimized Detailed Allocation within {category}')
+                                                                    f'Optimized Detailed Allocation within {category}')
                             if fig_detail:
                                 st.pyplot(fig_detail)
                                 plt.close(fig_detail)
@@ -574,6 +560,7 @@ elif st.session_state.page == 'results':
                         
                         # Save to Excel button only if openpyxl is available
                         if openpyxl_available:
+                            # Create a BytesIO object to save the Excel file in memory
                             import io
                             output = io.BytesIO()
                             portfolio_cumulative_growth_indexed.to_excel(output, header=True, index=True)
@@ -588,12 +575,10 @@ elif st.session_state.page == 'results':
                             st.info("Install 'openpyxl' (`pip install openpyxl`) to enable Excel download.")
                     else:
                         st.warning("Could not calculate or plot portfolio value history.")
-                else:
-                    st.warning("Could not calculate portfolio performance metrics due to data issues.")
             else:
                 st.error("Portfolio optimization failed to produce a valid allocation.")
 
-    else: # Fixed allocation scenario (no ESG/Active preference, i.e., Q11="No" AND Q12="No")
+    else: # Fixed allocation scenario (no ESG/Active preference)
         st.subheader(f"Fixed Portfolio for Risk Level {determined_risk_level}")
 
         if determined_risk_level not in portfolio_data_fixed:
@@ -613,24 +598,31 @@ elif st.session_state.page == 'results':
         fig_cat = plot_pie_chart_with_details(category_allocation, f'Fixed Portfolio Allocation by Category (Risk Level {determined_risk_level})')
         if fig_cat:
             st.pyplot(fig_cat)
-            plt.close(fig_cat) # Close the figure to free up memory
+            plt.close(fig_cat)
 
         # Detailed allocation within categories
         st.write("### Detailed Allocation within Categories:")
-        allocations_by_category_fixed = {cat: {} for cat in set(etf_to_category.values())}
+        allocations_by_category = {cat: {} for cat in set(etf_to_category.values())}
         for etf, weight in specific_etf_allocation.items():
             category = etf_to_category.get(etf)
             if category:
-                allocations_by_category_fixed[category][etf] = weight
+                allocations_by_category[category][etf] = weight
         
-        for category, allocation_dict in allocations_by_category_fixed.items():
+        active_categories_for_plotting = {
+            cat: alloc_dict for cat, alloc_dict in allocations_by_category.items()
+            if sum(alloc_dict.values()) > 0.001
+        }
+
+        for category, allocation_dict in active_categories_for_plotting.items():
             category_total_weight_in_portfolio = category_allocation.get(category, 0)
             if category_total_weight_in_portfolio > 0.001:
                 if len(allocation_dict) > 1:
-                    # Normalize allocation within the category for the pie chart
-                    normalized_allocation_dict = {etf: weight / sum(allocation_dict.values()) for etf, weight in allocation_dict.items()}
+                    normalized_allocation_dict = {
+                        etf: weight / category_total_weight_in_portfolio
+                        for etf, weight in allocation_dict.items()
+                    }
                     fig_detail = plot_pie_chart_with_details(normalized_allocation_dict,
-                                                            f'Fixed Detailed Allocation within {category}')
+                                                                f'Fixed Detailed Allocation within {category}')
                     if fig_detail:
                         st.pyplot(fig_detail)
                         plt.close(fig_detail)
@@ -642,7 +634,6 @@ elif st.session_state.page == 'results':
             else:
                 st.write(f"Category '{category}' has negligible allocation in this fixed portfolio.")
 
-        # Calculate and display performance metrics for the fixed portfolio
         total_ret, annualized_ret, sharpe_ratio, portfolio_cumulative_growth_indexed = calculate_portfolio_returns_and_sharpe(
             prices_for_portfolios, specific_etf_allocation, risk_free_rate_annual
         )
@@ -683,10 +674,8 @@ elif st.session_state.page == 'results':
                     st.info("Install 'openpyxl' (`pip install openpyxl`) to enable Excel download.")
             else:
                 st.warning("Could not calculate or plot portfolio value history.")
-        else:
-            st.warning("Could not calculate portfolio performance metrics due to data issues.")
     
     st.markdown("---")
     if st.button("Start Over"):
         st.session_state.clear() # Clear all session state variables
-        st.rerun() # Rerun the app from scratch
+        st.experimental_rerun() # Rerun the app from scratch
