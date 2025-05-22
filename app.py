@@ -28,58 +28,60 @@ questions = {
 # This data will be used if Q11 and Q12 are both "yes"
 portfolio_data_fixed = {
     2: {
-        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'others': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.45, 'EAGG': 0.41, 'VCEB': 0.14}
+        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00, 'Crypto': 0.00},
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BND': 0.1} # Changed BOND to BND
     },
     3: {
-        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Others': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.36, 'VCEB': 0.14}
+        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Real Estate': 0.00, 'Crypto': 0.00},
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BND': 0.25} # Changed BOND to BND
     },
     4: {
-        'category_allocation': {'Bond': 0.89, 'Equity': 0.11, 'Others': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.4493, 'EAGG': 0.1902, 'VCEB': 0.2591, 'ESGV': 0.0507, 'USSG': 0.0507}
+        'category_allocation': {'Bond': 0.85, 'Equity': 0.15, 'Real Estate': 0.00, 'Crypto': 0.00},
+        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075} # Changed BOND to BND
     },
     5: {
-        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Others': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.133, 'EAGG': 0.133, 'VCEB': 0.134, 'ESGV': 0.30, 'USSG': 0.30}
+        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00,'Crypto': 0.00},
+        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625} # Changed BOND to BND
     },
     6: {
-        'category_allocation': {'Bond': 0.63, 'Equity': 0.37, 'Others': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.061 ,'EAGG': 0.3764, 'VCEB': 0.19, 'USSG': 0.1863, 'ESGU': 0.1863}
+        'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00},
+        'specific_etf_allocation': {'AGG': 0.3085 ,'BND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415} # Changed BOND to BND, removed SHY (as it was 0 anyway)
     },
     7: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 1.0, 'Others': 0.0},
-        'specific_etf_allocation': {'ESGV': 0.1, 'USSG': 0.55, 'ESGU': 0.35}
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10,'Crypto': 0.00},
+        'specific_etf_allocation': {'VTI':0.21 , 'SPLG':0.2422 , 'VOO':0.4522, 'XLRE':0.0478 ,'SCHH':0.0478 }
     },
     8: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.61, 'Others': 0.39},
-        'specific_etf_allocation': {'ESGV': 0.2535, 'USSG': 0.2265, 'ESGU': 0.2335, 'GRES':0.1365, 'NURE':0.15}
+        'category_allocation': {'Bond': 0.0, 'Equity': 0.7, 'Real Estate': 0.30,'Crypto': 0.00},
+        'specific_etf_allocation': {'VTI': 0.2822, 'SPLG': 0.1422 , 'VOO': 0.2822, 'XLRE':0.1467 ,'SCHH':0.1467}
     },
     9: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10, 'Cash': 0.00},
-        'specific_etf_allocation': {'ESGV': 0.3353, 'USSG': 0.3353, 'ESGU': 0.30, 'GRES':0.1647, 'NURE':0.1647}
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.65, 'Real Estate': 0.3, 'Crypto': 0.05},
+        'specific_etf_allocation': {'VTI': 0.195, 'SPLG':0.13 , 'VOO': 0.325, 'XLRE':0.195 ,'SCHH':0.105, 'GBTC': 0.05}
     },
 }
 
 # --- Portfolio Data (for optimization scenario, from mean_var_esg.py) ---
 # This data defines the universe of assets available for optimization for each risk level
-risk_level_assets_optimized = {
-    2: ['SUSB','EAGG','VCEB'],
-    3: ['SUSB','EAGG','VCEB'],
-    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'],
-    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU'],
-    6: ['SUSB', 'EAGG', 'ESGV', 'USSG', 'ESGU'],
-    7: ['ESGV','USSG','ESGU'],
-    8: ['ESGV','USSG','ESGU','GRES','NURE'],
-    9: ['ESGV','USSG','ESGU','GRES','NURE']
+risk_level_assets = {
+    2: ['SHY','AGG','BOND',],
+    3: ['SHY','AGG','BOND',],
+    4: ['SHY','AGG','BOND','SPLG','VOO'],
+    5: ['SHY','AGG','BOND','VTI','SPLG','VOO'],
+    6: ['AGG','BOND','VTI','SPLG','VOO'],
+    7: ['VTI','SPLG','VOO','XLRE','SCHH'],
+    8: ['VTI','SPLG','VOO','XLRE','SCHH'],
+    9: ['VTI','SPLG','VOO','XLRE','SCHH','GBTC']
 }
 
 # Mapping ETFs to their categories (used in both scenarios for plotting)
+
 etf_to_category = {
-    'SUSB': 'Bond', 'EAGG': 'Bond', 'VCEB': 'Bond',
-    'ESGV': 'Equity', 'USSG': 'Equity', 'ESGU': 'Equity', 'VOO': 'Equity', 'IBIT': 'Equity',
-    'XLRE': 'Real Estate', 'SCHH': 'Real Estate',
+    'SHY': 'Bond', 'AGG': 'Bond', 'BOND': 'Bond',
+    'VTI': 'Equity', 'VTI': 'Equity', 'VTI': 'Equity', 'VTI': 'Equity', 'VTI': 'Equity',
+    'XLRE': 'Real Estate', 'SCHH': 'Real Estate', 'GBTC':'Crypto'
 }
+
 
 # Define all unique tickers across both fixed and optimized portfolios, plus risk-free rate
 all_unique_tickers_for_download = sorted(list(set(
