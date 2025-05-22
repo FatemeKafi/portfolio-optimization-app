@@ -29,23 +29,23 @@ questions = {
 portfolio_data_fixed = {
     2: {
         'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BND': 0.1} # Changed BOND to BND
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.4 ,'BOND': 0.1} # Changed BOND to BND
     },
     3: {
         'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BND': 0.25} # Changed BOND to BND
+        'specific_etf_allocation': {'SHY': 0.5 ,'AGG': 0.25 ,'BOND': 0.25} # Changed BOND to BND
     },
     4: {
         'category_allocation': {'Bond': 0.85, 'Equity': 0.15, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075} # Changed BOND to BND
+        'specific_etf_allocation': {'SHY': 0.4306 ,'AGG': 0.085 ,'BOND': 0.3419, 'VTI':0.015 , 'SPLG': 0.0525, 'VOO': 0.075} # Changed BOND to BND
     },
     5: {
         'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Real Estate': 0.00,'Crypto': 0.00},
-        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625} # Changed BOND to BND
+        'specific_etf_allocation': {'SHY': 0.3081 ,'AGG': 0.0705 ,'BOND': 0.3719, 'VTI':0.0375 , 'SPLG':0.145, 'VOO': 0.0625} # Changed BOND to BND
     },
     6: {
         'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Crypto': 0.00},
-        'specific_etf_allocation': {'AGG': 0.3085 ,'BND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415} # Changed BOND to BND, removed SHY (as it was 0 anyway)
+        'specific_etf_allocation': {'AGG': 0.3085 ,'BOND': 0.3085, 'VTI':0.1415 , 'SPLG':0.1415 , 'VOO':0.2415} # Changed BOND to BND, removed SHY (as it was 0 anyway)
     },
     7: {
         'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10,'Crypto': 0.00},
