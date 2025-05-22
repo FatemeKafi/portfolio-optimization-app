@@ -117,35 +117,45 @@ def plot_pie_chart_with_details(data_dict, title, figsize=(9, 9), autopct='%1.1f
 # --- Functions for Portfolio Optimization ---
 @st.cache_data # Cache this function to avoid re-downloading data
 def download_historical_prices(tickers, start_date, end_date):
-    """Downloads historical 'Adj Close' price data from Yahoo Finance for a given period."""
+    """Downloads historical 'Adj Close' or 'Close' price data from Yahoo Finance for a given period."""
     if not tickers:
         st.error("No tickers provided for download.")
-        #
-        return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+        return pd.DataFrame(), pd.DataFrame(), 0.0
 
-    st.info(f"Downloading historical data for {tickers} from {start_date} to {end_date}...")
+    st.info(f"Downloading historical data for {len(tickers)} assets from {start_date} to {end_date}...")
     try:
         data = yf.download(tickers, start=start_date, end=end_date, progress=False)
         if data.empty:
             st.error("No data downloaded. Check ticker symbols or date range.")
-    
-            return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
+            return pd.DataFrame(), pd.DataFrame(), 0.0
 
-        if 'Adj Close' in data.columns:
+        price_data = pd.DataFrame() # Initialize an empty DataFrame
+        
+        # Priority 1: Adj Close (for multiple tickers)
+        if isinstance(data.columns, pd.MultiIndex) and 'Adj Close' in data.columns.levels[0]:
             price_data = data['Adj Close']
-        elif 'Close' in data.columns:
+        # Priority 2: Adj Close (for single ticker as a DataFrame)
+        elif 'Adj Close' in data.columns: 
+            price_data = data[['Adj Close']]
+        # Priority 3: Close (for multiple tickers)
+        elif isinstance(data.columns, pd.MultiIndex) and 'Close' in data.columns.levels[0]: # Added this for multiple tickers
             price_data = data['Close']
+        # Priority 4: Close (for single ticker as a DataFrame)
+        elif 'Close' in data.columns: 
+            price_data = data[['Close']]
         else:
-            # Handle case where data might be a single Series or DataFrame with one column
-            if isinstance(data, pd.DataFrame) and len(data.columns) == 1:
-                price_data = data.iloc[:, 0]
-            elif isinstance(data, pd.Series):
-                price_data = data
+            # Fallback for single ticker as a Series (less common, but good to handle)
+            if len(tickers) == 1 and isinstance(data, pd.DataFrame) and not data.empty:
+                if 'Adj Close' in data.columns:
+                    price_data = data[['Adj Close']]
+                elif 'Close' in data.columns:
+                    price_data = data[['Close']]
+                else:
+                    st.error(f"Could not find 'Adj Close' or 'Close' prices for single ticker {tickers[0]}.")
+                    return pd.DataFrame(), pd.DataFrame(), 0.0
             else:
-                return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
-
-        if isinstance(price_data, pd.Series): # Ensure it's a DataFrame for consistency
-            price_data = price_data.to_frame()
+                st.error(f"Could not find 'Adj Close' or 'Close' prices for selected tickers. Data columns: {data.columns}")
+                return pd.DataFrame(), pd.DataFrame(), 0.0
 
         price_data = price_data.dropna(axis=1, how='all') # Drop columns that are all NaN
         price_data = price_data.dropna(axis=0, how='all') # Drop rows that are all NaN
