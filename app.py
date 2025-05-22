@@ -25,53 +25,53 @@ questions = {
 }
 
 # --- Portfolio Data (for fixed allocation scenario) ---
-# This data will be used if Q11 and Q12 are both "No"
+# This data will be used if Q11 and Q12 are both "yes"
 portfolio_data_fixed = {
     2: {
-        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'Real Estate': 0.00, 'Cash': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.333, 'EAGG': 0.333, 'VCEB': 0.334}
+        'category_allocation': {'Bond': 1.00, 'Equity': 0.00, 'others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.45, 'EAGG': 0.41, 'VCEB': 0.14}
     },
     3: {
-        'category_allocation': {'Bond': 0.80, 'Equity': 0.20, 'Real Estate': 0.00, 'Cash': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.266, 'EAGG': 0.267, 'VCEB': 0.267, 'ESGV': 0.10, 'USSG': 0.10}
+        'category_allocation': {'Bond': 1.0, 'Equity': 0.0, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.5, 'EAGG': 0.36, 'VCEB': 0.14}
     },
     4: {
-        'category_allocation': {'Bond': 0.60, 'Equity': 0.40, 'Real Estate': 0.00, 'Cash': 0.00},
-        'specific_etf_allocation': {'SUSB': 0.20, 'EAGG': 0.20, 'VCEB': 0.20, 'ESGV': 0.20, 'USSG': 0.20}
+        'category_allocation': {'Bond': 0.89, 'Equity': 0.11, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.4493, 'EAGG': 0.1902, 'VCEB': 0.2591, 'ESGV': 0.0507, 'USSG': 0.0507}
     },
     5: {
-        'category_allocation': {'Bond': 0.40, 'Equity': 0.60, 'Real Estate': 0.00, 'Cash': 0.00},
+        'category_allocation': {'Bond': 0.75, 'Equity': 0.25, 'Others': 0.00},
         'specific_etf_allocation': {'SUSB': 0.133, 'EAGG': 0.133, 'VCEB': 0.134, 'ESGV': 0.30, 'USSG': 0.30}
     },
     6: {
-        'category_allocation': {'Bond': 0.20, 'Equity': 0.60, 'Real Estate': 0.20, 'Cash': 0.00},
-        'specific_etf_allocation': {'EAGG': 0.10, 'VCEB': 0.10, 'ESGV': 0.20, 'USSG': 0.20, 'ESGU': 0.20, 'XLRE': 0.10, 'SCHH': 0.10}
+        'category_allocation': {'Bond': 0.63, 'Equity': 0.37, 'Others': 0.00},
+        'specific_etf_allocation': {'SUSB': 0.061 ,'EAGG': 0.3764, 'VCEB': 0.19, 'USSG': 0.1863, 'ESGU': 0.1863}
     },
     7: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.70, 'Real Estate': 0.30, 'Cash': 0.00},
-        'specific_etf_allocation': {'ESGV': 0.233, 'USSG': 0.233, 'ESGU': 0.234, 'XLRE': 0.15, 'SCHH': 0.15}
+        'category_allocation': {'Bond': 0.00, 'Equity': 1.0, 'Others': 0.0},
+        'specific_etf_allocation': {'ESGV': 0.1, 'USSG': 0.55, 'ESGU': 0.35}
     },
     8: {
-        'category_allocation': {'Bond': 0.00, 'Equity': 0.80, 'Real Estate': 0.20, 'Cash': 0.00},
-        'specific_etf_allocation': {'ESGV': 0.266, 'USSG': 0.267, 'ESGU': 0.267, 'XLRE': 0.10, 'SCHH': 0.10}
+        'category_allocation': {'Bond': 0.00, 'Equity': 0.61, 'Others': 0.39},
+        'specific_etf_allocation': {'ESGV': 0.2535, 'USSG': 0.2265, 'ESGU': 0.2335, 'GRES':0.1365, 'NURE':0.15}
     },
     9: {
         'category_allocation': {'Bond': 0.00, 'Equity': 0.90, 'Real Estate': 0.10, 'Cash': 0.00},
-        'specific_etf_allocation': {'ESGV': 0.30, 'USSG': 0.30, 'ESGU': 0.30, 'XLRE': 0.05, 'SCHH': 0.05}
+        'specific_etf_allocation': {'ESGV': 0.3353, 'USSG': 0.3353, 'ESGU': 0.30, 'GRES':0.1647, 'NURE':0.1647}
     },
 }
 
 # --- Portfolio Data (for optimization scenario, from mean_var_esg.py) ---
 # This data defines the universe of assets available for optimization for each risk level
 risk_level_assets_optimized = {
-    2: ['SUSB','EAGG','VCEB',],
-    3: ['SUSB','EAGG','VCEB',],
-    4: ['SUSB','EAGG','VCEB','ESGV','USSG','VOO'],
-    5: ['SUSB','EAGG','VCEB','ESGV','USSG','VOO'],
-    6: ['EAGG','VCEB','ESGV','USSG','VOO','XLRE','SCHH'],
-    7: ['ESGV','USSG','ESGU','XLRE','SCHH'],
-    8: ['ESGV','USSG','ESGU','XLRE','SCHH','IBIT'],
-    9: ['ESGV','USSG','ESGU','XLRE','SCHH','IBIT']
+    2: ['SUSB','EAGG','VCEB'],
+    3: ['SUSB','EAGG','VCEB'],
+    4: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU],
+    5: ['SUSB','EAGG','VCEB','ESGV','USSG','ESGU],
+    6: ['SUSB', 'EAGG', 'ESGV', 'USSG', 'ESGU'],
+    7: ['ESGV','USSG','ESGU'],
+    8: ['ESGV','USSG','ESGU','GRES','NURE'],
+    9: ['ESGV','USSG','ESGU','GRES','NURE']
 }
 
 # Mapping ETFs to their categories (used in both scenarios for plotting)
@@ -153,7 +153,7 @@ def download_historical_prices(tickers, start_date, end_date):
         
             return pd.DataFrame(), pd.DataFrame(), 0.0 # Changed to return three values
 
-        # --- محاسبه risk_free_rate_annual ---
+        # --- risk_free_rate_annual ---
         risk_free_rate_annual = 0.0
         if '^IRX' in price_data.columns: # Check if '^IRX' is in the final price_data
             rf_series = price_data['^IRX'].dropna()
